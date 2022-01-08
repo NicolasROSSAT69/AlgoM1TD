@@ -1,0 +1,93 @@
+#TD3 ////////////////////////////////////////////////////////////////////////////////////////
+#Exercice 2 :------------------------------------------------------
+
+import random
+
+class Tree2:
+    def __init__(self, value):
+      self.value = value
+      self.child_g = None
+      self.child_d = None
+
+    def set_gauche(self, value):
+      if self.child_g == None:
+         self.child_g = Tree2(value)
+      else:
+         new_node = Tree2(value)
+         new_node.child_g = self.child_g
+         self.child_g = new_node
+
+    def set_droit(self, value):
+      if self.child_d == None:
+         self.child_d = Tree2(value)
+      else:
+         new_node = Tree2(value)
+         new_node.child_d = self.child_d
+         self.child_d = new_node
+
+    def get_value(self):
+        return self.value
+
+    def get_gauche(self):
+        return self.child_g
+
+    def get_droit(self):
+        return self.child_d
+
+
+def affiche(T):
+    if T != None:
+        return (T.get_value(), affiche(T.get_gauche()), affiche(T.get_droit()))
+
+def parcours_profondeur_infixe(T):
+    if T != None:
+        parcours_profondeur_infixe(T.get_gauche())
+        print(' /', T.value, end='')
+        parcours_profondeur_infixe(T.get_droit())
+
+def inserer(T, v):
+    #Recherche du fil le plus proche
+    while T != None:
+        tree = T
+        if T.value > v:
+            #La valeur à inserer est plus petite de le noeud donc on cherche à gauche
+            T = T.get_gauche()
+        else:
+            # La valeur à inserer est plus grande de le noeud donc on cherche à droite
+            T = T.get_droit()
+    if tree.value > v:
+        # La valeur à inserer est plus petite que le fils donc on insere à gauche
+        tree.set_gauche(v)
+    else:
+        #La valeur à inserer est plus grande que le fils donc on insere à droite
+        tree.set_droit(v)
+
+#Permet de construire un arbre depuis une liste
+def constuireArbreList(list):
+    #définition de la racine de l'arbre (1er valeur de la liste)
+    first = Tree2(list[0])
+    #supression 1er élément de la liste
+    list.pop(0)
+    #parcour de la liste pour construire l'abre
+    while len(list) > 0:
+       inserer(first, list[0])
+       list.pop(0)
+    return first
+
+
+
+if __name__ == '__main__':
+
+    list = [25, 60, 35, 10, 5, 20, 65, 45, 70, 40, 50, 55, 30, 15]
+
+    tree = constuireArbreList(list)
+    print("Arbre créer depuis la liste (25, 60, 35, 10, 5, 20, 65, 45, 70, 40, 50, 55, 30, 15): ", affiche(tree))
+    print("Parcours Infixe: ")
+    parcours_profondeur_infixe(tree)
+
+    #Tester votre classe à l’aide d’une liste aléatoire de 10000 valeurs entières générées aléatoirement
+    l = [random.randint(0, 100) for i in range(1000)]
+    tree2 = constuireArbreList(l)
+    print("\n Arbre créer depuis une liste aléatoire de 1000: ", affiche(tree2))
+    print("Parcours Infixe: ")
+    parcours_profondeur_infixe(tree2)
