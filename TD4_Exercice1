@@ -1,0 +1,75 @@
+#TD4 ////////////////////////////////////////////////////////////////////////////////////////
+#Exercice 1 :------------------------------------------------------
+
+import random
+
+class Tree2:
+    def __init__(self, value):
+      self.value = value
+      self.child_g = None
+      self.child_d = None
+
+    def set_gauche(self, value):
+      if self.child_g == None:
+         self.child_g = Tree2(value)
+      else:
+         new_node = Tree2(value)
+         new_node.child_g = self.child_g
+         self.child_g = new_node
+
+    def set_droit(self, value):
+      if self.child_d == None:
+         self.child_d = Tree2(value)
+      else:
+         new_node = Tree2(value)
+         new_node.child_d = self.child_d
+         self.child_d = new_node
+
+    def get_value(self):
+        return self.value
+
+    def get_gauche(self):
+        return self.child_g
+
+    def get_droit(self):
+        return self.child_d
+
+
+def affiche(T):
+    if T != None:
+        return (T.get_value(), affiche(T.get_gauche()), affiche(T.get_droit()))
+
+def hauteur(T):
+    if T == None:
+        return 0
+    else:
+        return 1 + max(hauteur(T.get_gauche()), hauteur(T.get_droit()))
+
+def calculer_facteur_équilibrage(g, d):
+    facteur = d - g
+    if facteur == 0:
+        print("arbre équilibré")
+    else:
+        print("arbre pas équilibré")
+
+if __name__ == '__main__':
+    first = Tree2(11)
+    first.set_gauche(8)
+    first.set_droit(14)
+
+    sous_arbre_gauche = first.get_gauche()
+    sous_arbre_gauche.set_gauche(5)
+    sous_arbre_gauche.set_droit(10)
+
+    sous_arbre_droit = first.get_droit()
+    sous_arbre_droit.set_gauche(13)
+    sous_arbre_droit.set_droit(15)
+
+    print("Arbre : ", affiche(first))
+
+    #Calcul hauteur sous arbre gauche et droit
+    hauteur_sous_arbre_droit = hauteur(sous_arbre_gauche)
+    hauteur_sous_arbre_gauche = hauteur(sous_arbre_droit)
+
+    #Calcul du facteur d’équilibrage
+    calculer_facteur_équilibrage(hauteur_sous_arbre_gauche, hauteur_sous_arbre_droit)
