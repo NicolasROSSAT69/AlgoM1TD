@@ -1,0 +1,93 @@
+#TD3 ////////////////////////////////////////////////////////////////////////////////////////
+#Exercice 1 :------------------------------------------------------
+class Tree2:
+    def __init__(self, value):
+      self.value = value
+      self.child_g = None
+      self.child_d = None
+
+    def set_gauche(self, value):
+      if self.child_g == None:
+         self.child_g = Tree2(value)
+      else:
+         new_node = Tree2(value)
+         new_node.child_g = self.child_g
+         self.child_g = new_node
+
+    def set_droit(self, value):
+      if self.child_d == None:
+         self.child_d = Tree2(value)
+      else:
+         new_node = Tree2(value)
+         new_node.child_d = self.child_d
+         self.child_d = new_node
+
+    def get_value(self):
+        return self.value
+
+    def get_gauche(self):
+        return self.child_g
+
+    def get_droit(self):
+        return self.child_d
+
+
+def affiche(T):
+    if T != None:
+        return (T.get_value(), affiche(T.get_gauche()), affiche(T.get_droit()))
+
+def parcours_profondeur_infixe(T):
+    if T != None:
+        parcours_profondeur_infixe(T.get_gauche())
+        print(' /', T.value, end='')
+        parcours_profondeur_infixe(T.get_droit())
+
+def inserer(T, v):
+    #Recherche du fil le plus proche
+    while T != None:
+        tree = T
+        if T.value > v:
+            #La valeur à inserer est plus petite de le noeud donc on cherche à gauche
+            T = T.get_gauche()
+        else:
+            # La valeur à inserer est plus grande de le noeud donc on cherche à droite
+            T = T.get_droit()
+    if tree.value > v:
+        # La valeur à inserer est plus petite que le fils donc on insere à gauche
+        tree.set_gauche(v)
+    else:
+        #La valeur à inserer est plus grande que le fils donc on insere à droite
+        tree.set_droit(v)
+
+
+if __name__ == '__main__':
+
+    first = Tree2(20)
+    first.set_gauche(5)
+    first.set_droit(25)
+
+    five_node = first.get_gauche()
+    five_node.set_gauche(3)
+    five_node.set_droit(12)
+
+    twentyfive_node = first.get_droit()
+    twentyfive_node.set_gauche(21)
+    twentyfive_node.set_droit(28)
+
+    twelve_node = five_node.get_droit()
+    twelve_node.set_gauche(8)
+    twelve_node.set_droit(13)
+
+    eight_node = twelve_node.get_gauche()
+    eight_node.set_gauche(6)
+
+    print("Arbre : ", affiche(first))
+
+    #Insertion valeur:
+    inserer(first, 50)
+    print("Arbre avec 50 qui est inséré: ", affiche(first))
+    inserer(first, 19)
+    print("Arbre avec 19 qui est inséré: ", affiche(first))
+
+    print('- parcours profondeur infixe avec les deux valeurs ajoutées: ')
+    parcours_profondeur_infixe(first)
