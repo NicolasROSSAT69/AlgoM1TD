@@ -1,0 +1,111 @@
+#TD7 GRAPHE ////////////////////////////////////////////////////////////////////////////////////////
+#Exercice 1 :------------------------------------------------------
+    #1) B A C D E F : Pour le B
+    #C B E A D F : Pour le C
+    #E F D C B A : Pour le Z
+    #2)C E F D B : Pour le C   ps : le noeud A n’a pas été découvert (pb des graphes orienté)
+    #D B C E F : Pour le D
+    #F : Pour le F
+#Exercice 2 :------------------------------------------------------
+    #1)B A C E F D : Pour le noeud B
+    #C E F D B A : pour le noeud C
+    #E F C B A D : pour le noeud E
+    #2)C E F D B : pour le noeud C
+    #D B C E F : pour le noeud D
+    #F : pour le noeud F
+#Exercice 3 Implémenter une méthode permettant d’effectuer un parcours en largeur d’un graphe
+#Implémentation graphe à partir d'une matrice d'adjacence
+class Graphe:
+    def __init__(self, _id):
+        self.id = _id
+        self.destinations = []
+        self.alreadyDone = False
+
+    def set_destination(self, valeur):
+        self.destinations.append(valeur)
+
+    def get_destination(self):
+        return self.destinations
+
+    def get_id(self):
+        return self.id
+
+
+def creer_instances(m):
+    # Instancation des différents noeuds
+    liste_instances = []
+    for i in range(len(m)):
+        liste_instances.append(Graphe(i))
+    return liste_instances
+
+
+def creer_destinations(l, m):
+    # Parcours de la matrice d'adjacence et des destinations des points
+    for x in range(len(l)):
+        for y in range(len(m)):
+            if m[x][y] == 1:
+                l[x].set_destination(l[y])
+    return l
+
+
+def afficher_graphe(l):
+    # affichage du graphe
+    for w in range(len(l)):
+        destination = l[w].get_destination()
+        for v in range(len(destination)):
+            print("Destination de ", l[w].get_id(), " : ", destination[v].get_id())
+
+
+def calculer_degre_noeud(l):
+    #Calcul du degre du noeud
+    for i in range(len(l)):
+        nbr_destination = l[i].get_destination()
+        degre_noeud = len(nbr_destination)
+        print("Degre du noeud ", l[i].get_id(), " : ", degre_noeud)
+    print("\n")
+
+
+def parcourir_en_largeur(d):
+    #parcours en largeur du graphe
+    currentPoints = []
+    currentPoints.append(d)
+    result = []
+    while (currentPoints):
+        currentPoint = currentPoints.pop(0)
+        if currentPoint.alreadyDone == False:
+            result.append(currentPoint)
+            for point in currentPoint.destinations:
+                currentPoints.append(point)
+            currentPoint.alreadyDone = True
+    return result
+
+
+if __name__ == '__main__':
+
+    matrice_adjacence = [
+        [0, 1, 0, 0, 0, 0],
+        [1, 0, 1, 1, 0, 0],
+        [0, 1, 0, 0, 1, 0],
+        [0, 1, 0, 0, 1, 0],
+        [0, 0, 1, 1, 0, 1],
+        [0, 0, 0, 0, 1, 0]
+    ]
+
+    liste_instances = creer_instances(matrice_adjacence)
+
+    liste_instances = creer_destinations(liste_instances, matrice_adjacence)
+
+    calculer_degre_noeud(liste_instances)
+
+    afficher_graphe(liste_instances)
+
+    #Parcours de largeur du graphe depuis un point défini lors de l'appel de la fonction
+    resultParcoursLargeur = parcourir_en_largeur(liste_instances[0])
+
+    #Affichage resulat parcours en largeur
+    print("\n")
+    print("Resultat du pacours en largeur : ")
+    for h in range(len(resultParcoursLargeur)):
+        print(resultParcoursLargeur[h].get_id())
+
+
