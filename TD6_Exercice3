@@ -26,11 +26,11 @@ def creer_instances(m):
     return liste_instances
 
 
-def creer_destinations(l):
+def creer_destinations(l, m):
     # Parcours de la matrice d'adjacence et des destinations des points
     for x in range(len(l)):
-        for y in range(len(matrice_adjacence)):
-            if matrice_adjacence[x][y] == 1:
+        for y in range(len(m)):
+            if m[x][y] == 1:
                 l[x].set_destination(l[y])
     return l
 
@@ -64,7 +64,7 @@ if __name__ == '__main__':
 
     liste_instances = creer_instances(matrice_adjacence)
 
-    liste_instances = creer_destinations(liste_instances)
+    liste_instances = creer_destinations(liste_instances, matrice_adjacence)
 
     calculer_degre_noeud(liste_instances)
 
